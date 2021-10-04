@@ -1,5 +1,10 @@
 package hello.core.lifrcycle;
 
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.net.ConnectException;
 
 public class NetworkClient {
@@ -12,8 +17,6 @@ public class NetworkClient {
 
     public NetworkClient() {
         System.out.println("생성자 호출, url= "+url);
-        connect();
-        call("초기화 연결 메세지");
     }
 
     //서비스 시작시 호출
@@ -28,5 +31,16 @@ public class NetworkClient {
     //서비스 종료시 호출
     public void disconnect () {
         System.out.println("close: "+url);
+    }
+
+    @PostConstruct
+    public void init() {
+        connect();
+        call("초기화 연결 메세지");
+    }
+
+    @PreDestroy
+    public void close()  {
+        disconnect();
     }
 }
